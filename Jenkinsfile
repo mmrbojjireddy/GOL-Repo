@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     tools { 
-        maven 'Maven' 
+        maven 'maven' 
       
     }
 stages { 
@@ -12,7 +12,7 @@ stages {
 
       // Get some code from a GitHub repository
 
-   //  git 'https://github.com/raknas999/GOL-Repo.git'
+   //  git 'https://github.com/mmrbojjireddy/GOL-Repo.git'
 
       // Get the Maven tool.
      
@@ -57,23 +57,23 @@ stages {
 }
      stage('Artifact upload') {
       steps {
-     nexusPublisher nexusInstanceId: '1234', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'gameoflife-web/target/gameoflife.war']], mavenCoordinate: [artifactId: 'gameoflife', groupId: 'com.wakaleo.gameoflife', packaging: 'war', version: '$BUILD_NUMBER']]]
+     nexusPublisher nexusInstanceId: '12345', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'gameoflife-web/target/gameoflife.war']], mavenCoordinate: [artifactId: 'gameoflife', groupId: 'com.wakaleo.gameoflife', packaging: 'war', version: '$BUILD_NUMBER']]]
       }
  }
     stage('Deploy War') {
       steps {
-          //deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://18.220.134.203:8080/')], contextPath: null, war: '**/*.war'
+          //deploy adapters: [tomcat8(credentialsId: 'tomcat-cred', path: '', url: 'http://13.233.194.92:8080/')], contextPath: null, war: '**/*.war'
           sh label: '', script: 'ansible-playbook deploy-withinfra.yml'
           //sh label: '', script: 'ansible-playbook deploy.yml'
       }
  }
 }
-post {
-        success {
-            archiveArtifacts 'gameoflife-web/target/*.war'
-        }
-        failure {
-            mail to:"raknas000@gmail.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build failed"
-        }
-    }       
+// post {
+  //      success {
+    //        archiveArtifacts 'gameoflife-web/target/*.war'
+      //  }
+        // failure {
+           // mail to:"raknas000@gmail.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build failed"
+        // }
+    // }       
 }
